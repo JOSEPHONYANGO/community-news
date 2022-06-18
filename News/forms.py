@@ -1,27 +1,30 @@
 from django import forms
-
-from News.models import Neighbourhood
-
+from .models import *
 
 
-class CreateNeighbourhoodForm(forms.Model):
+
+class ProfileForm(forms.ModelForm):
     class Meta:
-        model = Neighbourhood
-        fields = ['name',]
-
-class DeleteNeighbourhoodForm(forms.Model):
+        model=Profile        
+        fields=['first_name', 'last_name', 'profile_pic', 'username', 'bio', 'location', 'mobile_number', 'email']
+        
+class UpdateProfileForm(forms.ModelForm):
     class Meta:
-        model = Neighbourhood
-        fields = ['name']
+        model=Profile        
+        fields=['first_name', 'last_name', 'profile_pic', 'username', 'bio', 'location', 'mobile_number', 'email']
 
-class FindNeighbourhoodForm(forms.Model):
+class CreateHoodForm(forms.ModelForm):
     class Meta:
-        model =         
+        model=Neighborhood
+        fields = ['hood_image','name','hood_description','location']
 
-class UpdateNeighbourhoodForm(forms.Model):
+class PostForm(forms.ModelForm):
     class Meta:
-        model = 
+        model=Post
+        fields = ['title','post_image','post_description','hood', 'category']
 
-class UpdateOccupants(forms.Model):
+
+class BusinessForm(forms.ModelForm):
     class Meta:
-        model =         
+        model=Business
+        fields = ['name','business_photo','description','location', 'neighborhood']
