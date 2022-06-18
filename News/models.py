@@ -33,6 +33,41 @@ class Location(models.Model):
     def __str__(self):
         return self.name        
 
+class Neighborhood(models.Model):
+    hood_image =  CloudinaryField('image', null=True)
+    name = models.CharField(max_length=100)
+    hood_description = models.TextField(max_length=1000, null=True)
+    location = models.ForeignKey(Location, on_delete=models.CASCADE, null=True)
+    occupants_count = models.IntegerField(default=0)
+    admin = models.ForeignKey(User, on_delete = models.CASCADE, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    update_at = models.DateTimeField(auto_now=True)
+
+    def create_neighborhood(self):
+        self.save()
+
+    @classmethod
+    def delete_neighborhood(cls, id):
+        cls.objects.filter(id=id).delete()
+
+    @classmethod
+    def update_neighborhood(cls, id):
+        cls.objects.filter(id=id).update()
+    
+
+    @classmethod
+    def search_by_name(cls, search_term):
+        hood = cls.objects.filter(name__icontains=search_term)
+        return hood
+
+    # find neighbourhood by id
+    @classmethod
+    def find_neigborhood(cls, id):
+        hood = cls.objects.get(id=id)
+        return hood
+
+    def __str__(self):
+        return self.name
 
 
 
