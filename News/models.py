@@ -1,4 +1,12 @@
 from django.db import models
+from cloudinary.models import CloudinaryField
+import datetime as dt
+from django.contrib.auth.models import User
+from django.db.models.deletion import CASCADE
+from django.db.models.fields import related
+from django.dispatch import receiver
+from django.db.models.signals import post_save
+
 
 # Create your models here.
 
