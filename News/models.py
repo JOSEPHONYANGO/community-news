@@ -17,4 +17,5 @@ class User (models.Model):
 class Business(models.Model):
     Business_name = models.CharField(max_length=100)
     User = models.ForeignKey(Business,on_delete=models.CASCADE)
-    Neighbourhood_id = models.ForeignKey(Neighbourhood, on_delete=models.CASCADE)       
+    Neighbourhood_id = models.ForeignKey(Neighbourhood, on_delete=models.CASCADE)
+    Business_email = models.EmailField(max_length=100)       
