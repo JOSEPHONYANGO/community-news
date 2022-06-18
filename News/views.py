@@ -118,3 +118,69 @@ def leave_hood(request, id):
     request.user.profile.neighbourhood = None
     request.user.profile.save()
     return redirect('hood')
+
+@login_required(login_url="/accounts/login/")
+def create_post(request):
+    
+
+    current_user = request.user
+    if request.method == 'POST':
+        post_form = PostForm(request.POST, request.FILES)
+        if post_form.is_valid():
+
+            post = post_form.save(commit=False)
+            post.user = current_user
+            post.save()
+        
+        return HttpResponseRedirect('hood')
+
+    else:
+        post_form = PostForm()
+
+    context = {'post_form':post_form}
+
+    return render(request, 'post/create_post.html',context)
+
+@login_required(login_url="/accounts/login/")
+def create_business(request):
+    current_user = request.user
+    if request.method == "POST":
+        form=BusinessForm(request.POST,request.FILES)
+        if form.is_valid():
+            business=form.save(commit=False)
+            business.user=current_user
+            business.hood = hoods
+            business.save()
+        return HttpResponseRedirect('/businesses')
+    else:
+        form=BusinessForm()
+    return render (request,'business/business_form.html', {'form': form, 'profile': profile})
+
+@login_required(login_url="/accounts/login/")
+def businesses(request):
+    current_user = request.user
+    profile = Profile.objects.filter(user_id=current_user.id).first()
+    businesses = Business.objects.filter(user_id=current_user.id)
+    if profile is None:
+        profile = Profile.objects.filter(
+            user_id=current_user.id).first()
+        businesses = Business.objects.filter(user_id=current_user.id)
+        locations = Location.objects.all()
+        neighborhood = Neighborhood.objects.all()
+        return render(request, "profile.html", {"danger": "Update Profile", "locations": locations, "neighborhood": neighborhood, "businesses": businesses})
+    else:
+        neighborhood = profile.neighbourhood
+        businesses = Business.objects.filter(user_id=current_user.id)
+        return render(request, "business/business.html", {"businesses": businesses})
+
+@login_required(login_url="/accounts/login/")
+def search_business(request):
+    if 'search_term' in request.GET and request.GET["search_term"]:
+        search_term = request.GET.get("search_term")
+        searched_businesses = Business.objects.filter(name__icontains=search_term)
+        message = f"Search For: {search_term}"
+
+        return render(request, "search.html", {"message": message, "businesses": searched_businesses})
+    else:
+        message = "You haven't searched for any term"
+        return render(request, "search.html", {"message": message})    
