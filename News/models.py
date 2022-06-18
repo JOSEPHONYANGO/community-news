@@ -95,22 +95,29 @@ class Profile(models.Model):
     def save_user_profile(sender, instance, **kwargs):
         instance.profile.save()       
 
+class Post(models.Model):
+    user = models.ForeignKey(User,on_delete = models.CASCADE, null=True)  
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    title = models.CharField(max_length=100)
+    post_image = CloudinaryField('post_image', null=True)
+    post_description = models.TextField(max_length=1000)
+    hood = models.ForeignKey(Neighborhood, on_delete=models.CASCADE, null=True, related_name='hood_post')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        ordering = ['-pk']
+        
+    def __str__(self):
+        return f'{self.title} Post'
+    
+    def delete_post(self):
+        self.delete()
+    
 
-class Neighbourhood(models.Model):
-    name = models.CharField(max_length=100)
-    location = models.CharField(max_length=100)
-    population = models.IntegerField(max_length=50)
-    admin = models.ForeignKey(admin,on_delete=models.CASCADE)
+    def create_post(self):
+        self.save()
+        
+    def update_post(self):
+        self.update()
 
-class User (models.Model):
-    name = models.CharField(max_length=100)
-    id = models.AutoField(max_length=100) 
-    Neighbourhood = models.ForeignKey(Neighbourhood)
-    Email = models.EmailField(max_length=100)
-
-class Business(models.Model):
-    Business_name = models.CharField(max_length=100)
-    User = models.ForeignKey(Business,on_delete=models.CASCADE)
-    Neighbourhood_id = models.ForeignKey(Neighbourhood, on_delete=models.CASCADE)
-    Business_email = models.EmailField(max_length=100)       
