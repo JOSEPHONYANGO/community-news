@@ -1,0 +1,67 @@
+{% if user.is_authenticated %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="/"><i class="fa fa-home fa-lg" aria-hidden="true"></i></a>
+
+
+
+  <div class="collapse navbar-collapse justify-content-center" id="navbarTogglerDemo03"> 
+
+      <form style="color:black; margin-left: 30%;font-size: 30px;"class="me-auto search-form " target="_self" action="{% url 'search_business' %}">
+          <div class="input-group text-dark">
+  
+              <input style="font-size:15px "type="text" class="form-control" placeholder="Search Business"
+                  name="search_term">
+          </div>
+      </form>
+      
+  </div>
+  <ul class="nav justify-content-end">
+    <li class="nav-item active">
+      <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="/admin">Admin</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="/businesses">Businesses</a>
+    </li>
+    {% for prof in profiles %}
+    <li class="nav-item">
+      <a class="" href="{% url 'profile'%}"><img src="{{ prof.profile_pic.url }}" alt="" class="profile-img"> </a>
+    </li>
+    {% endfor %}
+
+    <li class="nav-item">
+      <a class="nav-link" href="{%url 'hood' %}" >Hood</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'logout'%}">Logout</a>
+    </li>
+    {% else %}
+
+    {% if user.profile.neighbourhood %}
+    <li class="mb-4">
+        <a href="{% url 'single-hood' user.profile.neighbourhood.id %}">
+            <i class="fas fa-paper-plane"></i>&nbsp;
+            &nbsp;{{user.profile.neighbourhood.name}}
+        </a>
+    </li>
+    {% else %}
+    <li class="mb-4">
+        <a href=""> &nbsp;
+            No Hood Yet
+        </a>
+    </li>
+    {% endif %}
+    
+      <li>
+        <a class='btn btn-default' href="/accounts/login">Login</a>
+      </li>
+
+    {% endif %}
+  </ul>
+
+</nav>
